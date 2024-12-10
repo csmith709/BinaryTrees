@@ -6,7 +6,6 @@
     <title>Enter Numbers for BST</title>
     <!-- Link to CSS -->
     <link rel="stylesheet" href="/css/styles.css">
-
     <!-- Link to JavaScript -->
     <script src="/js/main.js"></script>
 
@@ -34,6 +33,26 @@
 <h2>Tree Visualization:</h2>
 <div id="treeVisualization"></div>
 
-<script src="/static/js/main.js"></script>
+<<!-- Pass treeJson from Thymeleaf to JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const treeJson = /*[[${tree}]]*/ '{}';  // Injected tree data from the backend
+        console.log(treeJson);  // Debugging step
+
+        const treeVisualizationDiv = document.getElementById('treeVisualization');
+
+        if (treeJson !== '{}' && treeVisualizationDiv) {
+            try {
+                const parsedTree = JSON.parse(treeJson);
+                treeVisualizationDiv.textContent = JSON.stringify(parsedTree, null, 2); // Display tree as formatted JSON
+            } catch (e) {
+                treeVisualizationDiv.textContent = 'Error parsing tree data: ' + e.message;
+            }
+        }
+    });
+</script>
+
+
+
 </body>
 </html>
