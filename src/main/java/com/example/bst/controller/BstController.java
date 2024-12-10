@@ -74,11 +74,4 @@ public class BstController {
         model.addAttribute("error", "Invalid number format: " + ex.getMessage());
         return "error"; // Return an error page if the user enters invalid numbers
     }
-
-    @GetMapping("/results")
-    public String showResults(@ModelAttribute("tree") String tree, Model model) {
-        model.addAttribute("tree", tree);
-        return "results";
-    }
-
 }
