@@ -43,6 +43,23 @@ public class TreeNodeTest {
     }
 
     @Test
+    public void testBalance() {
+        // Create an unbalanced tree
+        TreeNode root = new TreeNode(10);
+        root.setLeft(new TreeNode(5));
+        root.getLeft().setLeft(new TreeNode(3));
+
+        assertFalse(root.isBalanced());
+
+        // Balance the tree
+        TreeNode balancedTree = root.balance();
+
+        assertTrue(balancedTree.isBalanced());
+        assertEquals(5, balancedTree.getValue()); // Middle value should be the new root
+    }
+
+
+    @Test
     public void testToMap() {
         // Create nodes
         TreeNode root = new TreeNode(10);
@@ -62,6 +79,7 @@ public class TreeNodeTest {
         // Check nested structure
         Map<String, Object> leftMap = (Map<String, Object>) map.get("left");
         assertEquals(5, leftMap.get("value"));
+
 
         Map<String, Object> rightMap = (Map<String, Object>) map.get("right");
         assertEquals(15, rightMap.get("value"));

@@ -1,27 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Previous Trees</title>
+    <title>Tree Results</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-<h1>Previous Binary Search Trees</h1>
-
-<ul>
-    <li th:each="tree : ${trees}">
-        <strong>Input:</strong> <span th:text="${tree.inputNumbers}"></span><br>
-        <strong>Tree:</strong> <pre th:text="${tree.treeStructure}"></pre>
-    </li>
-</ul>
+<h1>Binary Search Tree Results</h1>
+<pre id="treeResults" th:text="${tree}"></pre>
 
 
+  <!-- Display the tree JSON here -->
 
 <button onclick="window.location.href='/'">Back to Enter Numbers</button>
-
 
 <script src="/js/main.js"></script>
 </body>

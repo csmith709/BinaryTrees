@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Numbers for BST</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<h1>Enter Numbers to Create a Binary Search Tree</h1>
+<form action="/process-numbers" method="post" id="treeForm">
+    <label for="numbers">Enter numbers (comma separated):</label>
+    <input type="text" id="numbers" name="numbers" required>
+    <br>
+    <label>
+        <input type="checkbox" id="balanced" name="balanced"> Create a balanced tree
+    </label>
+    <br>
+    <button type="submit">Submit</button>
+</form>
+<form action="/previous-trees" method="get">
+    <button type="submit">Show Previous Trees</button>
+</form>
+
+
+
+
+<h2>Tree Visualization:</h2>
+<div id="treeVisualization"></div>
+
+<script src="/js/main.js"></script>
+</body>
+</html>

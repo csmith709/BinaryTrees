@@ -4,6 +4,7 @@ import com.example.bst.model.BstData;
 import com.example.bst.repository.BstDataRepository;
 import com.example.bst.model.TreeNode;
 import org.springframework.stereotype.Service;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +12,8 @@ import java.util.List;
 @Service
 public class BstService {
 
-    private final BstDataRepository bstDataRepository; // Inject repository
+    private final BstDataRepository bstDataRepository;
 
-    // Constructor-based injection for repository
     public BstService(BstDataRepository bstDataRepository) {
         this.bstDataRepository = bstDataRepository;
     }
@@ -41,7 +41,6 @@ public class BstService {
         return root;
     }
 
-    // Balancing the BST
     public TreeNode balanceTree(TreeNode root) {
         List<Integer> sortedValues = new ArrayList<>();
         inOrderTraversal(root, sortedValues);
@@ -69,16 +68,48 @@ public class BstService {
     }
 
     // Save the tree data to the database
-    public void saveTree(String numbers, String treeJson) {
-        BstData bstData = new BstData();
-        bstData.setInputNumbers(numbers);
-        bstData.setTreeStructure(treeJson);
-        bstDataRepository.save(bstData); // Corrected this line
+    public void saveTree(String numbers, TreeNode root) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String treeJson = objectMapper.writeValueAsString(root);
+
+            BstData bstData = new BstData();
+            bstData.setInputNumbers(numbers);
+            bstData.setTreeStructure(treeJson);
+
+            bstDataRepository.save(bstData);
+        } catch (Exception e) {
+            throw new RuntimeException("Error saving tree structure", e);
+        }
     }
 
+    // In BstService.java
+    public TreeNode deserializeTree(String treeJson) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.readValue(treeJson, TreeNode.class);  // Deserialize to TreeNode
+        } catch (Exception e) {
+            throw new RuntimeException("Error deserializing tree structure", e);
+        }
+    }
 
     // Get all saved trees from the database
     public List<BstData> getAllTrees() {
-        return bstDataRepository.findAll(); // Corrected this line
+        return bstDataRepository.findAll();
+    }
+
+    private TreeNode currentTree;
+
+    public TreeNode getCurrentTree() {
+        // Retrieve the latest tree from your repository, session, or wherever it's stored
+        return currentTree; // Replace with actual storage logic
+    }
+    public void setCurrentTree(TreeNode tree) {
+        this.currentTree = tree;  // Set the current tree
+    }
+
+    // In BstService.java
+    public BstData getTreeById(Long treeId) {
+        return bstDataRepository.findById(treeId).orElse(null);  // Return null if not found
     }
 }

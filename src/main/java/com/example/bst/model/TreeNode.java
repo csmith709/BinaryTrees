@@ -1,6 +1,8 @@
 package com.example.bst.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TreeNode {
@@ -8,7 +10,11 @@ public class TreeNode {
     private TreeNode left;
     private TreeNode right;
 
-    // Constructor
+    // Default constructor for Jackson deserialization
+    public TreeNode() {
+    }
+
+    // Constructor with a value
     public TreeNode(int value) {
         this.value = value;
         this.left = null;
@@ -62,18 +68,63 @@ public class TreeNode {
         return map;
     }
 
+    // Height of the tree
     public int height() {
-        // Base case: height of an empty tree is 0
-        return 1 + Math.max(
-                this.left != null ? this.left.height() : 0,
-                this.right != null ? this.right.height() : 0
-        );
+        int leftHeight = (this.left != null) ? this.left.height() : 0;
+        int rightHeight = (this.right != null) ? this.right.height() : 0;
+        return 1 + Math.max(leftHeight, rightHeight);
     }
 
 
+    // Check if the tree is balanced
     public boolean isBalanced() {
         return Math.abs((this.left != null ? this.left.height() : 0) -
-                (this.right != null ? this.right.height() : 0)) <= 1;
+                (this.right != null ? this.right.height() : 0)) <= 1 &&
+                (this.left == null || this.left.isBalanced()) &&
+                (this.right == null || this.right.isBalanced());
     }
 
+
+    // Balance the tree (Balanced BST)
+    public TreeNode balance() {
+        if (this == null) return null;
+        List<Integer> sortedValues = new ArrayList<>();
+        inOrderTraversal(this, sortedValues);
+        return buildBalancedBst(sortedValues, 0, sortedValues.size() - 1);
+    }
+
+
+    // Helper method for in-order traversal
+    private void inOrderTraversal(TreeNode root, List<Integer> sortedValues) {
+        if (root == null) {
+            return;
+        }
+        inOrderTraversal(root.left, sortedValues);
+        sortedValues.add(root.value);
+        inOrderTraversal(root.right, sortedValues);
+    }
+
+    // Helper method to build a balanced BST from sorted values
+    private TreeNode buildBalancedBst(List<Integer> sortedValues, int start, int end) {
+        if (start > end) {
+            return null;
+        }
+
+        int mid = (start + end) / 2;
+        TreeNode node = new TreeNode(sortedValues.get(mid));
+
+        node.left = buildBalancedBst(sortedValues, start, mid - 1);
+        node.right = buildBalancedBst(sortedValues, mid + 1, end);
+
+        return node;
+    }
+
+    @Override
+    public String toString() {
+        return "TreeNode{" +
+                "value=" + value +
+                ", left=" + left +
+                ", right=" + right +
+                '}';
+    }
 }

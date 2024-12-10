@@ -3,6 +3,7 @@ package com.example.bst.repository;
 import com.example.bst.model.BstData;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class BstDataRepositoryTest {
 
     @Autowired
@@ -30,6 +32,9 @@ public class BstDataRepositoryTest {
 
     @Test
     void testFindAllTrees() {
+        // Clean the repository before the test
+        bstDataRepository.deleteAll();
+
         BstData bstData1 = new BstData();
         bstData1.setInputNumbers("5,3,7");
         bstData1.setTreeStructure("{\"value\":5,\"left\":{\"value\":3},\"right\":{\"value\":7}}");
@@ -42,5 +47,13 @@ public class BstDataRepositoryTest {
 
         List<BstData> allTrees = bstDataRepository.findAll();
         assertEquals(2, allTrees.size());
+        System.out.println("Number of trees: " + allTrees.size());
+
+        System.out.println("All trees in the database:");
+        for (BstData tree : allTrees) {
+            System.out.println(tree.getInputNumbers());
+        }
+
     }
+
 }
