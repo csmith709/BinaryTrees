@@ -8,8 +8,8 @@
 </head>
 <body>
 <h1>Binary Search Tree Results</h1>
-<pre id="treeResults" th:text="${tree}"></pre>
-
+<pre id="treeResults" th:if="${tree != null}" th:text="${tree}"></pre>
+<p th:if="${tree == null}">No tree data available.</p>
 
   <!-- Display the tree JSON here -->
 
